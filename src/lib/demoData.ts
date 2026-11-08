@@ -1,0 +1,192 @@
+import { RepairProvider } from '../types';
+
+export const SRI_LANKA_DISTRICTS = [
+  'Colombo',
+  'Gampaha',
+  'Kalutara',
+  'Kandy',
+  'Matale',
+  'Nuwara Eliya',
+  'Galle',
+  'Matara',
+  'Hambantota',
+  'Jaffna',
+  'Kurunegala',
+  'Puttalam',
+  'Anuradhapura',
+  'Polonnaruwa',
+  'Badulla',
+  'Ratnapura',
+  'Kegalle',
+  'Batticaloa',
+  'Trincomalee',
+];
+
+export const SMARTPHONE_BRANDS = [
+  'Apple iPhone',
+  'Samsung',
+  'Xiaomi / Redmi',
+  'Oppo',
+  'Vivo',
+  'Google Pixel',
+  'Realme',
+  'OnePlus',
+  'Huawei',
+  'Sony Xperia',
+  'Other Brand',
+];
+
+export const LAPTOP_BRANDS = [
+  'Dell',
+  'HP',
+  'Lenovo',
+  'ASUS',
+  'Acer',
+  'Apple MacBook',
+  'MSI',
+  'Toshiba / Dynabook',
+  'Microsoft Surface',
+  'Other Brand',
+];
+
+export const INITIAL_DEMO_PROVIDERS: RepairProvider[] = [
+  {
+    id: 'demo-colombo-1',
+    name: 'Example repair listing - Colombo',
+    deviceCategories: ['laptop'],
+    services: ['General diagnostics', 'Cooling & fan cleaning', 'Motherboard repair', 'Thermal paste replacement'],
+    district: 'Colombo',
+    town: 'Colombo 03',
+    address: 'Kollupitiya Main Rd, Colombo 03, Sri Lanka',
+    contact: '+94 11 200 0001 (Demonstration Number)',
+    website: 'https://example.com/demo-repairs-colombo',
+    operatingHours: 'Mon-Sat: 9:00 AM - 6:00 PM',
+    isDemo: true,
+    verificationStatus: 'unverified',
+    createdAt: '2026-01-15T00:00:00.000Z',
+  },
+  {
+    id: 'demo-gampaha-1',
+    name: 'Example repair listing - Gampaha',
+    deviceCategories: ['smartphone'],
+    services: ['Screen & display replacement', 'Battery health service', 'Charging port cleaning'],
+    district: 'Gampaha',
+    town: 'Kelaniya',
+    address: 'Kandy Road, Kelaniya, Gampaha District, Sri Lanka',
+    contact: '+94 33 200 0002 (Demonstration Number)',
+    website: 'https://example.com/demo-repairs-gampaha',
+    operatingHours: 'Mon-Sun: 9:30 AM - 7:00 PM',
+    isDemo: true,
+    verificationStatus: 'unverified',
+    createdAt: '2026-01-16T00:00:00.000Z',
+  },
+  {
+    id: 'demo-kandy-1',
+    name: 'Example repair listing - Kandy',
+    deviceCategories: ['laptop', 'smartphone'],
+    services: ['Battery & power troubleshooting', 'Keyboard replacement', 'Data recovery assistance'],
+    district: 'Kandy',
+    town: 'Peradeniya',
+    address: 'Peradeniya Road, Kandy, Sri Lanka',
+    contact: '+94 81 200 0003 (Demonstration Number)',
+    website: 'https://example.com/demo-repairs-kandy',
+    operatingHours: 'Mon-Fri: 9:00 AM - 5:30 PM',
+    isDemo: true,
+    verificationStatus: 'unverified',
+    createdAt: '2026-01-17T00:00:00.000Z',
+  },
+  {
+    id: 'demo-galle-1',
+    name: 'Example repair listing - Galle',
+    deviceCategories: ['laptop', 'smartphone'],
+    services: ['Screen repair', 'Liquid damage assessment', 'OS reinstallation'],
+    district: 'Galle',
+    town: 'Galle Fort / Main St',
+    address: 'Main Street, Galle 80000, Sri Lanka',
+    contact: '+94 91 200 0004 (Demonstration Number)',
+    website: 'https://example.com/demo-repairs-galle',
+    operatingHours: 'Mon-Sat: 10:00 AM - 6:00 PM',
+    isDemo: true,
+    verificationStatus: 'unverified',
+    createdAt: '2026-01-20T00:00:00.000Z',
+  },
+  {
+    id: 'demo-kurunegala-1',
+    name: 'Example repair listing - Kurunegala',
+    deviceCategories: ['laptop'],
+    services: ['Power supply servicing', 'Display hinge repair', 'SSD upgrade & servicing'],
+    district: 'Kurunegala',
+    town: 'Kurunegala Town',
+    address: 'Colombo Road, Kurunegala, Sri Lanka',
+    contact: '+94 37 200 0005 (Demonstration Number)',
+    website: 'https://example.com/demo-repairs-kurunegala',
+    operatingHours: 'Mon-Sat: 9:00 AM - 5:00 PM',
+    isDemo: true,
+    verificationStatus: 'unverified',
+    createdAt: '2026-02-01T00:00:00.000Z',
+  },
+];
+
+export const SAMPLE_CONVERSATIONS = [
+  {
+    id: 'sample-1',
+    title: 'Laptop overheating',
+    device: 'Dell Inspiron 15',
+    category: 'Heat & unexpected shutdown',
+    status: 'General guidance ready',
+    initialUserMessage: "My Dell Inspiron gets very hot and switches off after about 20 minutes. It's three years old and out of warranty.",
+    guideResponse: "Thanks—that sounds like a heat or shutdown symptom, but I can't diagnose it remotely. Turn it off and let it cool; check that external vents aren't blocked. If it keeps happening, ask a technician to inspect the cooling system and provide a written quote.",
+    safeChecks: 'Turn off and cool down. Check that external vents are not blocked. Do not open the device.',
+    recommendedNextStep: 'Request a cooling-system inspection and written quotation from a local technician.',
+  },
+  {
+    id: 'sample-2',
+    title: 'Phone battery life',
+    device: 'Samsung Galaxy A52',
+    category: 'Battery & power degradation',
+    status: 'General guidance ready',
+    initialUserMessage: 'My Samsung Galaxy A52 battery drops from 60% to 10% in half an hour. The back panel does not look swollen.',
+    guideResponse: 'Rapid battery drain without swelling is typically caused by normal chemical battery aging or a rogue app running in the background. Check your Android Battery Usage settings first to see if a specific app is consuming power.',
+    safeChecks: 'Check battery usage screen in Settings. Ensure charger and cable are certified. Do not leave charging unattended on soft bedding.',
+    recommendedNextStep: 'Inquire with a repair provider about replacement battery availability and warranty terms.',
+  },
+  {
+    id: 'sample-3',
+    title: 'Flickering screen',
+    device: 'Lenovo IdeaPad 3',
+    category: 'Display & video cable',
+    status: 'General guidance ready',
+    initialUserMessage: 'The laptop display flickers or shows horizontal colored lines whenever I adjust the screen angle.',
+    guideResponse: 'Flickering that changes as you physically move the laptop lid points strongly towards a loose or worn eDP display flex cable in the hinge area, rather than a fried GPU or broken LCD panel.',
+    safeChecks: 'Connect to an external monitor or TV via HDMI. If the external screen is steady, the internal graphics card is working fine.',
+    recommendedNextStep: 'Obtain an estimate for display cable re-seating or ribbon replacement.',
+  },
+];
+
+export const FAQ_ITEMS = [
+  {
+    question: 'Is this a real hardware diagnosis?',
+    answer:
+      'No. RepairFirst LK provides preliminary, rule-based and AI-assisted educational guidance. Only a trained, qualified technician using proper diagnostic tools can confirm physical hardware faults. Never treat online guidance as a guaranteed diagnosis.',
+  },
+  {
+    question: 'Should I open my device to check it myself?',
+    answer:
+      'No. Modern laptops and smartphones contain delicate surface-mount components, glued ribbons, and lithium-ion batteries that pose serious fire, thermal, or electrical shock risks if punctured or shorted. Always leave internal disassembly to certified technicians.',
+  },
+  {
+    question: 'Are the listed repair services verified?',
+    answer:
+      'Any listings labeled "DEMO DATA – NOT A VERIFIED REAL PROVIDER" are mock illustrative records provided for academic demonstration. Where real listings appear, always confirm contact details, credentials, written quotations, and service warranties independently before visiting.',
+  },
+  {
+    question: 'How does the repair vs replacement calculator work?',
+    answer:
+      'The calculator is completely deterministic. It compares your genuine repair quotation in Sri Lankan Rupees (LKR) against the price of an equivalent replacement device. A cost ratio under 25-50% generally favors repair, while ratios above 70% suggest weighing age, software updates, and overall device condition.',
+  },
+  {
+    question: 'Where can I responsibly dispose of broken electronics in Sri Lanka?',
+    answer:
+      'Electronic waste (e-waste) should never be discarded with household rubbish. Visit https://ekunu.lk/ to explore official Sri Lankan e-waste collection drives and Central Environmental Authority (CEA) drop-off points. Always wipe personal data and securely isolate swollen batteries first.',
+  },
+];

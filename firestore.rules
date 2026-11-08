@@ -1,0 +1,112 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net: Default-deny all unspecified access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Admin helper: allowlist collection lookup or bootstrapped verified admin email
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (request.auth.token.email == 'sanjayalasnan327@gmail.com' && request.auth.token.email_verified == true)
+      );
+    }
+
+    // User Profile rules
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isSignedIn() && request.auth.uid == userId &&
+        incoming().keys().hasAll(['email', 'role']) &&
+        (incoming().role == 'customer' || (incoming().role == 'admin' && request.auth.token.email == 'sanjayalasnan327@gmail.com')) &&
+        incoming().email is string &&
+        incoming().email.size() <= 150;
+      allow update: if isSignedIn() && (
+        (request.auth.uid == userId && !incoming().diff(existing()).affectedKeys().hasAny(['role', 'email'])) ||
+        isAdmin()
+      );
+      allow delete: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+
+      // User Registered Devices subcollection
+      match /devices/{deviceId} {
+        allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+        allow create: if isSignedIn() && (request.auth.uid == userId || isAdmin()) &&
+          isValidId(deviceId) &&
+          incoming().userId == request.auth.uid &&
+          incoming().deviceType in ['smartphone', 'laptop'] &&
+          incoming().brand is string && incoming().brand.size() <= 100 &&
+          incoming().model is string && incoming().model.size() <= 100;
+        allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin()) &&
+          incoming().userId == existing().userId;
+        allow delete: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      }
+
+      // User Assessments subcollection
+      match /assessments/{assessmentId} {
+        allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+        allow create: if isSignedIn() && (request.auth.uid == userId || isAdmin()) &&
+          isValidId(assessmentId) &&
+          incoming().userId == request.auth.uid &&
+          incoming().problemDescription is string && incoming().problemDescription.size() <= 2500;
+        allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin()) &&
+          incoming().userId == existing().userId;
+        allow delete: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      }
+
+      // User Decisions / Cost Comparisons subcollection
+      match /decisions/{decisionId} {
+        allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+        allow create: if isSignedIn() && (request.auth.uid == userId || isAdmin()) &&
+          isValidId(decisionId) &&
+          incoming().userId == request.auth.uid &&
+          incoming().repairQuotationLKR is number &&
+          incoming().replacementPriceLKR is number;
+        allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin()) &&
+          incoming().userId == existing().userId;
+        allow delete: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      }
+    }
+
+    // Providers Directory (public read, admin write)
+    match /providers/{providerId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Platform Feedback (authenticated user create, admin read)
+    match /feedback/{feedbackId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn() &&
+        incoming().userId == request.auth.uid &&
+        incoming().rating is number &&
+        incoming().comment is string && incoming().comment.size() <= 1000;
+    }
+
+    // Protected Admins collection (read for auth check, write disabled)
+    match /admins/{adminId} {
+      allow get: if isSignedIn();
+      allow list: if isAdmin();
+      allow write: if false;
+    }
+  }
+}

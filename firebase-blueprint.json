@@ -1,0 +1,137 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile details stored for registered accounts",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["customer", "admin"] },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email", "role"]
+    },
+    "Device": {
+      "title": "Device",
+      "description": "User registered smartphone or laptop",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "deviceType": { "type": "string", "enum": ["smartphone", "laptop"] },
+        "brand": { "type": "string", "maxLength": 100 },
+        "model": { "type": "string", "maxLength": 100 },
+        "purchaseYear": { "type": "number" },
+        "warrantyStatus": { "type": "string", "enum": ["in_warranty", "out_of_warranty", "unknown"] },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["userId", "deviceType", "brand", "model", "purchaseYear", "warrantyStatus"]
+    },
+    "Assessment": {
+      "title": "Assessment",
+      "description": "AI assessment of a device symptom and recommendations",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "deviceId": { "type": "string", "maxLength": 128 },
+        "problemDescription": { "type": "string", "maxLength": 2000 },
+        "issueCategory": { "type": "string", "maxLength": 100 },
+        "aiSummary": { "type": "string", "maxLength": 2000 },
+        "professionalHelpRecommended": { "type": "boolean" },
+        "dangerWarning": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["userId", "problemDescription", "issueCategory", "aiSummary", "professionalHelpRecommended", "dangerWarning"]
+    },
+    "Decision": {
+      "title": "Decision",
+      "description": "Saved repair vs replacement comparison calculation",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "assessmentId": { "type": "string", "maxLength": 128 },
+        "repairQuotationLKR": { "type": "number" },
+        "additionalRepairCostLKR": { "type": "number" },
+        "replacementPriceLKR": { "type": "number" },
+        "repairCostRatio": { "type": "number" },
+        "costDifference": { "type": "number" },
+        "warrantyStatus": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["userId", "repairQuotationLKR", "replacementPriceLKR", "repairCostRatio", "costDifference"]
+    },
+    "Provider": {
+      "title": "Provider",
+      "description": "Electronic repair service provider listing in Sri Lanka",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 150 },
+        "district": { "type": "string", "maxLength": 100 },
+        "town": { "type": "string", "maxLength": 100 },
+        "address": { "type": "string", "maxLength": 300 },
+        "contact": { "type": "string", "maxLength": 100 },
+        "website": { "type": "string", "maxLength": 300 },
+        "isDemo": { "type": "boolean" },
+        "verificationStatus": { "type": "string", "enum": ["verified", "unverified", "disabled"] },
+        "verifiedAt": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["name", "district", "town", "verificationStatus"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "User rating and feedback for assessment experience",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "assessmentId": { "type": "string", "maxLength": 128 },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["userId", "rating", "comment"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Administrator allowlist record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 150 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document"
+    },
+    "/users/{userId}/devices/{deviceId}": {
+      "schema": "Device",
+      "description": "Subcollection of user devices"
+    },
+    "/users/{userId}/assessments/{assessmentId}": {
+      "schema": "Assessment",
+      "description": "Subcollection of user device assessments"
+    },
+    "/users/{userId}/decisions/{decisionId}": {
+      "schema": "Decision",
+      "description": "Subcollection of user repair vs replacement comparisons"
+    },
+    "/providers/{providerId}": {
+      "schema": "Provider",
+      "description": "Directory of Sri Lankan repair providers"
+    },
+    "/feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "Platform assessment feedback submissions"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminRecord",
+      "description": "Protected administrator lookup collection"
+    }
+  }
+}
